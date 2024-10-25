@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const s3Url = 'https://intelbeachleague.s3.amazonaws.com/players.json';
-    const adminPassword = "serveIn"; // Replace with the actual password
 
     // Fetch player data directly from S3
     async function fetchPlayerData(cacheBuster = false) {
@@ -19,17 +18,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Error fetching player data:', error);
         }
     }
-
-    // Admin Button Click Event
-    const adminButton = document.getElementById('admin-button');
-    adminButton.addEventListener('click', function () {
-        const userPassword = prompt("Enter Admin Password:");
-        if (userPassword === adminPassword) {
-            window.location.href = '/admin.html'; // Redirect to admin page
-        } else {
-            alert("Incorrect password!");
-        }
-    });
 
     // Sort players based on wins and points, and alphabetically for those with 0 stats
     function sortPlayers(players) {
