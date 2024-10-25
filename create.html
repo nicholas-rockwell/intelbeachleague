@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create A Tournament</title>
+    <link rel="stylesheet" href="/css/create.css">
+    <link rel="stylesheet" href="/css/toast.css">
+</head>
+<body>
+    <header>
+        <h1>Create A Tournament</h1>
+        <h2>Tournament Pin: PLACEHOLDER</h2>
+    </header>
+
+    <section id="tournament-settings">
+        <div class="form-group">
+            <h2>Tournament Name</h2>
+            <input type="text" id="tournament-name" placeholder="Enter Tournament Name" required>
+        </div>
+    </section>
+
+    <section id="player-management-section">
+        <h2>Manage Players</h2>
+        <div id="add-player">
+            <input type="text" id="new-player-name" placeholder="Player Name">
+            <button id="add-player-button" class="add-button">Add Player</button>
+        </div>
+        <br>
+        <div id="remove-player">
+            <select id="remove-player-select">
+                <option value="" disabled selected>Select a Player to Remove</option>
+                <!-- Dynamically populate with player names -->
+            </select>
+            <button id="remove-player-button" class="remove-button">Remove Player</button>
+        </div>
+        <br>
+        <h2>Player List</h2>
+        <div id="player-list">
+            <!-- List of added players will be displayed here -->
+        </div>
+    </section>
+
+    <section id="tournament-rules">
+        <h2>Choose Rules</h2>
+        <div class="form-group">
+            <label for="tournament-rules">Select Tournament Format:</label>
+            <select id="tournament-rules" required>
+                <option value="kob_best_of_1">King of the Beach - Best of 1</option>
+                <option value="kob_best_of_3">King of the Beach - Best of 3</option>
+                <option value="double_elimination">Bracket - Double-Elimination</option>
+                <option value="pool_and_bracket">Pool Play & Bracket - Double-Elimination</option>
+            </select>
+        </div>
+    </section>
+
+    <section id="buttons-section">
+        <button id="create-tournament-button" class="create-button">Create Tournament</button>
+        <button id="return-home-button" class="return-button">Return to Home Screen</button>
+    </section>
+
+    <script src="/js/create.js"></script>
+</body>
+</html>
