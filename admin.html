@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+    <header>
+        <h1>Beach Volleyball League Admin Panel</h1>
+    </header>
+
+    <!-- Pool Assignment Section -->
+    <section id="assign-pools-section">
+        <h2>Assign Pools</h2>
+        <form id="pool-form">
+            <div id="player-list">
+                <!-- Players will be listed here with pool assignment dropdowns -->
+            </div>
+            <button class="submit-pools-button" id="submit-pools">Submit Pools</button>
+        </form>
+    </section>
+
+    <!-- Player Management Section -->
+    <section id="player-management-section">
+        <h2>Player Management</h2>
+        <div id="add-player">
+            <input type="text" id="new-player-name" placeholder="Player Name">
+            <button id="add-player-button">Add Player</button>
+        </div>
+        <br>
+        <div id="remove-player">
+            <select id="remove-player-select">
+                <option value="" disabled selected>Select a Player to Remove</option>
+                <!-- Dynamically populate with player names -->
+            </select>
+            <button id="remove-player-button">Remove Player</button>
+        </div>
+    </section>
+    <section id="admin-section">
+        <button id="admin-button">Return to League Page</button>
+    </section>
+    <br>
+    <div></div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>

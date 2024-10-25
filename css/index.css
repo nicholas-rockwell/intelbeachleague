@@ -1,0 +1,102 @@
+        /* Reset & Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #FFFFFF;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #ffd900e8;
+            font-weight: bold;
+            font-size: 2em;
+        }
+
+        h2 {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            font-size: .75em;
+            font-weight: lighter;
+            margin-top: 10px;
+        }
+
+        .join-tournament,
+        .create-tournament {
+            margin-top: 30px;
+        }
+
+        #join-form input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #FFFFFF;
+        }
+
+        #join-form button,
+        #create-tournament-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #FFD700;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        #join-form button:hover,
+        #create-tournament-button:hover {
+            background-color: #FFC300;
+        }
+
+        @media only screen and (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            h1,
+            h2 {
+                font-size: 1.2em;
+            }
+
+            .join-button,
+            .create-button {
+                font-size: 1em;
+                /* Slightly reduced for smaller screens */
+            }
+        }

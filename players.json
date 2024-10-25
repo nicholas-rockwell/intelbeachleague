@@ -1,0 +1,112 @@
+{
+  "players": [
+    {
+      "name": "Connor",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    },
+    {
+      "name": "Logan",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    },
+    {
+      "name": "John",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    },
+    {
+      "name": "Ryan",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    },
+    {
+      "name": "Erik",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    },
+    {
+      "name": "Adrian",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    },
+    {
+      "name": "Daniel",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    },
+    {
+      "name": "Jalen",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    },
+    {
+      "name": "Kellen",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    },
+    {
+      "name": "Nick",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    },
+    {
+      "name": "Shannon",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    },
+    {
+      "name": "Jacob",
+      "wins": 0,
+      "losses": 0,
+      "points": 0,
+      "pool": null,
+      "history": [],
+      "weekInfo": {}
+    }
+  ]
+}
