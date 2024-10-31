@@ -8,6 +8,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const newPlayerInput = document.getElementById('new-player-name');
     const players = [];
 
+    // Retrieve newly created pin to display
+    document.addEventListener('DOMContentLoaded', function() {
+        const tournamentPin = localStorage.getItem('tournamentPin');
+        if (tournamentPin) {
+            // Display the pin on the page, for example, at the top of the form
+            document.getElementById('tournament-pin-display').textContent = `Tournament Pin: ${tournamentPin}`;
+        } else {
+            console.error('Tournament pin not found');
+            alert('Error: Tournament pin not found. Please try again.');
+        }
+    });    
+
     // Add Player Functionality
     addPlayerButton.addEventListener('click', function() {
         const newPlayerName = newPlayerInput.value.trim();
@@ -36,8 +48,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Assign Pin for New Tournament
+    async function assignPin() {
+        try {
+            const response = await fetch('/assignPin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            const data = await response.json();
+            return data.tournamentPin;  // Returns the assigned tournament pin
+        } catch (error) {
+            console.error('Error assigning pin:', error);
+            showToast('Error assigning pin.');
+        }
+    }
+
     // Create Tournament Functionality
-    createTournamentButton.addEventListener('click', function() {
+    createTournamentButton.addEventListener('click', async function() {
         const tournamentName = document.getElementById('tournament-name').value.trim();
         const tournamentRules = document.getElementById('tournament-rules').value;
 
@@ -51,14 +80,20 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        // Assign a new tournament pin
+        const tournamentPin = await assignPin();
+        if (!tournamentPin) return;
+
+        // Prepare tournament data for admin update
         const tournamentData = {
-            name: tournamentName,
-            rules: tournamentRules,
-            players: players
+            tournamentPin: tournamentPin,
+            tournamentName: tournamentName,
+            tournamentFormat: tournamentRules,
+            addedPlayers: players
         };
 
-        // Send POST request to save tournament data
-        fetch('/createTournament', {
+        // Send POST request to create tournament with admin update
+        fetch('/adminUpdate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

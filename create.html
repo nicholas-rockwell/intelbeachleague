@@ -10,7 +10,9 @@
 <body>
     <header>
         <h1>Create A Tournament</h1>
-        <h2>Tournament Pin: PLACEHOLDER</h2>
+        <div id="tounrament-pin-display">
+            <!-- Pin from lambda / local storage -->
+        </div>
     </header>
 
     <section id="tournament-settings">
@@ -46,10 +48,8 @@
         <div class="form-group">
             <label for="tournament-rules">Select Tournament Format:</label>
             <select id="tournament-rules" required>
-                <option value="kob_best_of_1">King of the Beach - Best of 1</option>
-                <option value="kob_best_of_3">King of the Beach - Best of 3</option>
-                <option value="double_elimination">Bracket - Double-Elimination</option>
-                <option value="pool_and_bracket">Pool Play & Bracket - Double-Elimination</option>
+                <option value="kob_best_of_1">One Game Per Partner</option>
+                <option value="kob_best_of_3">Best Of Three</option>
             </select>
         </div>
     </section>
