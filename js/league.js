@@ -6,6 +6,18 @@ document.addEventListener('DOMContentLoaded', async function () {
         return;
     }
 
+    // Handle pin display
+    const pinDisplayElement = document.getElementById('tournament-pin-display');
+    if (pinDisplayElement && tournamentPin) {
+        console.log("Retrieved tournament pin:", tournamentPin);
+        pinDisplayElement.textContent = `Tournament Pin: ${tournamentPin}`;
+    } else if (!pinDisplayElement) {
+        console.error('Element #tournament-pin-display not found.');
+    } else {
+        console.error('Tournament pin not found in local storage');
+        alert('Error: Tournament pin not found. Please try again.');
+    }
+
     // Fetch tournament data from Lambda using the tournament pin
     async function fetchTournamentDataByPin() {
         const requestBody = {
@@ -106,27 +118,40 @@ document.addEventListener('DOMContentLoaded', async function () {
     function renderAllMatches(matches) {
         const allMatchesSection = document.getElementById('current-matches');
         allMatchesSection.innerHTML = '';
-
+    
         matches.forEach((match, index) => {
             if (match.isScoreSubmitted) return;
-
+    
             const matchCard = document.createElement('div');
             matchCard.classList.add('match-card');
+    
             matchCard.innerHTML = `
-                <div class="match-teams">
-                    ${match.team1} vs ${match.team2}
+                <div class="match-teams-container">
+                    <div class="team">
+                        <span class="match-team-name">${match.team1}</span>
+                        <input type="number" min="0" max="40" class="score-input team1-score" placeholder="Score" />
+                    </div>
+                    <div class="match-teams">
+                        <span>vs</span>
+                    </div>
+                    <div class="team">
+                        <span class="match-team-name">${match.team2}</span>
+                        <input type="number" min="0" max="40" class="score-input team2-score" placeholder="Score" />
+                    </div>
                 </div>
-                <div class="score-inputs">
-                    <input type="number" min="0" max="40" class="team1-score" placeholder="Score for ${match.team1}" />
-                    <input type="number" min="0" max="40" class="team2-score" placeholder="Score for ${match.team2}" />
+                <div class="score-submit-container">
+                    <button class="submit-score" data-team1="${match.team1}" data-team2="${match.team2}" data-index="${index}">
+                        Submit Score
+                    </button>
                 </div>
-                <button class="submit-score" data-team1="${match.team1}" data-team2="${match.team2}" data-index="${index}">Submit Score</button>
             `;
+    
             allMatchesSection.appendChild(matchCard);
         });
-
+    
         attachScoreSubmitEvent();
     }
+    
 
     // Handle score submission
     function attachScoreSubmitEvent() {

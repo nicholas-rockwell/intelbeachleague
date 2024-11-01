@@ -51,6 +51,11 @@ h2 {
     margin-bottom: 10px;
 }
 
+#tournament-pin-display {
+    color: #FFD700; /* Golden Yellow for Titles */
+    font-size: 1em;
+}
+
 .smaller-ranks-h2 {
     text-decoration: underline;
 }
@@ -279,7 +284,7 @@ h3 {
     padding: 10px;
 }
 
-.score-input {
+.score-inputs {
     width: 60px;
     padding: 10px;
     border-radius: 8px;
@@ -328,6 +333,7 @@ h3 {
     border: none;
     border-radius: 20px;
     cursor: pointer;
+    background-color: #FFD700;
     color: black;
     font-weight: bold;
     transition: background 0.3s, transform 0.3s;
@@ -335,7 +341,7 @@ h3 {
 }
 
 .score-submit-container button:hover {
-    background: #e0e0e0;
+    background-color: #FFD700;
     transform: translateY(-3px);
     box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5);
 }
@@ -370,10 +376,6 @@ h3 {
 
     .match-teams {
         font-size: 0.9em;
-    }
-
-    .score-input {
-        width: 50px;
     }
 
     .score-submit-container button {
