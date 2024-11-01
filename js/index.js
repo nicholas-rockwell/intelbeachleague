@@ -22,6 +22,55 @@ async function fetchWithTimeout(url, options, timeout = 15000) { // 15 seconds d
     });
 }
 
+document.getElementById('enter-league').addEventListener('click', async function(event) {
+    event.preventDefault();  // Prevent form submission if inside a form
+    
+    console.log("Join league button clicked"); // Initial log for click
+
+    const tournamentPin = document.getElementById('tournament-pin-input').value;
+    if (!tournamentPin) {
+        alert("Please enter a tournament pin.");
+        return;
+    }
+
+    console.log("Attempting to verify pin:", tournamentPin);  // Log before fetch
+    
+    const requestBody = {
+        httpMethod: 'POST',
+        path: '/checkPin',
+        action: 'checkPin',
+        tournamentPin: tournamentPin
+    };
+
+    try {
+        const response = await fetch(`https://mxyll1dlqi.execute-api.us-west-2.amazonaws.com/prod/checkPin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        console.log("Fetch completed with status:", response.status);  // Log after fetch
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log("Pin verified:", result);
+            localStorage.setItem('tournamentPin', tournamentPin);
+            window.location.href = '/league.html';
+        } else {
+            console.error("Failed to verify pin:", response.status);
+            alert("Pin wasn't found or verification failed.");
+        }
+    } catch (error) {
+        console.error('Error finding pin', error);
+        alert('Failed to join tournament. Please try again.');
+    }
+});
+
+
+
+
 // Creating tournament pin assignment and redirect
 document.getElementById('create-new-tournament').addEventListener('click', async function() {
     // Prepare the request body for the Lambda function
