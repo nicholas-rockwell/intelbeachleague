@@ -68,9 +68,6 @@ document.getElementById('enter-league').addEventListener('click', async function
     }
 });
 
-
-
-
 // Creating tournament pin assignment and redirect
 document.getElementById('create-new-tournament').addEventListener('click', async function() {
     // Prepare the request body for the Lambda function

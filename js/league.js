@@ -7,13 +7,22 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Fetch tournament data from Lambda using the tournament pin
-    async function fetchTournamentDataByPin(pin) {
+    async function fetchTournamentDataByPin() {
+        const tournamentPin = localStorage.getItem('tournamentPin');
+    
+        const requestBody = {
+            httpMethod: 'POST',
+            path: '/getTournamentData',
+            tournamentPin: tournamentPin
+        };
+    
         try {
-            const response = await fetch(`https://mxyll1dlqi.execute-api.us-west-2.amazonaws.com/prod/getTournamentData?tournamentPin=${pin}`, {
-                method: 'GET',
+            const response = await fetch(`https://mxyll1dlqi.execute-api.us-west-2.amazonaws.com/prod/getTournamentData`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify(requestBody)
             });
     
             if (!response.ok) {
@@ -28,6 +37,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             alert('Failed to load tournament data. Please check the pin and try again.');
         }
     }
+    
     
     // Parse DynamoDB JSON format into a usable format
     function parseDynamoDBResponse(data) {
