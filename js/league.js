@@ -8,14 +8,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Fetch tournament data from Lambda using the tournament pin
     async function fetchTournamentDataByPin() {
-        const tournamentPin = localStorage.getItem('tournamentPin');
-    
         const requestBody = {
             httpMethod: 'POST',
             path: '/getTournamentData',
-            tournamentPin: tournamentPin
+            body: {
+                tournamentPin: tournamentPin
+            }
         };
-    
+
         try {
             const response = await fetch(`https://mxyll1dlqi.execute-api.us-west-2.amazonaws.com/prod/getTournamentData`, {
                 method: 'POST',
@@ -24,45 +24,43 @@ document.addEventListener('DOMContentLoaded', async function () {
                 },
                 body: JSON.stringify(requestBody)
             });
-    
             if (!response.ok) {
                 throw new Error('Tournament data not found');
             }
-    
+
             const data = await response.json();
-            console.log("Fetched tournament data:", data);
+            console.log("Fetched tournament data:", data);  // For debugging
             return parseDynamoDBResponse(data);
         } catch (error) {
             console.error('Error fetching tournament data:', error);
             alert('Failed to load tournament data. Please check the pin and try again.');
         }
     }
-    
-    
+
     // Parse DynamoDB JSON format into a usable format
     function parseDynamoDBResponse(data) {
+        // Parse the stringified body if needed
+        const parsedBody = JSON.parse(data.body);
+
         const tournamentData = {
-            tournamentName: data.tournamentName?.S || 'Unnamed Tournament',
-            players: data.players?.L.map(player => ({
-                name: player.M.name.S,
-                wins: parseInt(player.M.wins.N, 10),
-                losses: parseInt(player.M.losses.N, 10),
-                points: parseInt(player.M.points.N, 10),
-                history: player.M.history?.L.map(match => match.S)
-            })) || [],
-            matches: data.matches?.L.map(match => ({
-                team1: match.M.team1.S,
-                team2: match.M.team2.S,
-                isScoreSubmitted: match.M.isScoreSubmitted?.BOOL || false,
-                games: match.M.games?.L.map(game => ({
-                    gameNumber: parseInt(game.M.gameNumber.N, 10),
-                    score: game.M.score?.S || "",
-                    isScoreSubmitted: game.M.isScoreSubmitted?.BOOL || false
-                }))
-            })) || [],
-            weekInfo: data.weekInfo?.M || {}
+            tournamentName: parsedBody.tournamentName || 'Unnamed Tournament',
+            players: parsedBody.players.map(player => ({
+                name: player.name,
+                wins: player.wins,
+                losses: player.losses,
+                points: player.points,
+                history: player.history || []
+            })),
+            matches: parsedBody.weekInfo.matches.map(match => ({
+                team1: match.team1,
+                team2: match.team2,
+                isScoreSubmitted: match.isScoreSubmitted,
+                games: match.games || []
+            })),
+            weekInfo: parsedBody.weekInfo || {}
         };
 
+        console.log("Parsed tournament data:", tournamentData);  // For debugging
         return tournamentData;
     }
 
@@ -170,7 +168,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (response.ok) {
                 alert('Scores submitted successfully!');
-                const updatedData = await fetchTournamentDataByPin(tournamentPin);
+                const updatedData = await fetchTournamentDataByPin();
                 renderPlayerList(sortPlayers(updatedData.players));
                 renderAllMatches(updatedData.matches);
             } else {
@@ -184,10 +182,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Fetch and render tournament data
-    const tournamentData = await fetchTournamentDataByPin(tournamentPin);
+    const tournamentData = await fetchTournamentDataByPin();
     if (tournamentData) {
         updateTournamentName(tournamentData.tournamentName);
         renderPlayerList(sortPlayers(tournamentData.players));
-        renderAllMatches(tournamentData.matches);
+        renderAllMatches(tournamentData.weekInfo.matches);
     }
 });
