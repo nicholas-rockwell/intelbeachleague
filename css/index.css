@@ -68,7 +68,7 @@
         }
 
         #join-form button,
-        #create-tournament-button {
+        #create-new-tournament {
             width: 100%;
             padding: 10px;
             background-color: #FFD700;
@@ -81,7 +81,7 @@
         }
 
         #join-form button:hover,
-        #create-tournament-button:hover {
+        #create-new-tournament:hover {
             background-color: #FFC300;
         }
 

@@ -30,6 +30,12 @@ h2 {
     margin-bottom: 15px;
 }
 
+h4 {
+    font-size: .75em;
+    font-weight: lighter;
+    margin-top: 10px;
+}
+
 /* Tournament Settings Section */
 #tournament-settings {
     margin-bottom: 20px;
@@ -39,6 +45,11 @@ h2 {
     background-color: #1c1c1c;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#tournament-pin-display {
+    color: #FFD700; /* Golden Yellow for Titles */
+    font-size: 1em;
 }
 
 .form-group {

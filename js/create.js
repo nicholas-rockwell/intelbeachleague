@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOMContentLoaded fired");  // Check if event listener is firing
+
+    // Element references
     const addPlayerButton = document.getElementById('add-player-button');
     const removePlayerButton = document.getElementById('remove-player-button');
     const createTournamentButton = document.getElementById('create-tournament-button');
@@ -6,19 +9,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const playerListDiv = document.getElementById('player-list');
     const playerListSelect = document.getElementById('remove-player-select');
     const newPlayerInput = document.getElementById('new-player-name');
+    const pinDisplayElement = document.getElementById('tournament-pin-display');
     const players = [];
 
-    // Retrieve newly created pin to display
-    document.addEventListener('DOMContentLoaded', function() {
-        const tournamentPin = localStorage.getItem('tournamentPin');
-        if (tournamentPin) {
-            // Display the pin on the page, for example, at the top of the form
-            document.getElementById('tournament-pin-display').textContent = `Tournament Pin: ${tournamentPin}`;
-        } else {
-            console.error('Tournament pin not found');
-            alert('Error: Tournament pin not found. Please try again.');
-        }
-    });    
+    // Retrieve and display the tournament pin from local storage
+    const tournamentPin = localStorage.getItem('tournamentPin');
+    if (pinDisplayElement && tournamentPin) {
+        console.log("Retrieved tournament pin:", tournamentPin);
+        pinDisplayElement.textContent = `Tournament Pin: ${tournamentPin}`;
+    } else if (!pinDisplayElement) {
+        console.error('Element #tournament-pin-display not found.');
+    } else {
+        console.error('Tournament pin not found in local storage');
+        alert('Error: Tournament pin not found. Please try again.');
+    }
 
     // Add Player Functionality
     addPlayerButton.addEventListener('click', function() {
@@ -48,66 +52,59 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Assign Pin for New Tournament
-    async function assignPin() {
-        try {
-            const response = await fetch('/assignPin', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
-            const data = await response.json();
-            return data.tournamentPin;  // Returns the assigned tournament pin
-        } catch (error) {
-            console.error('Error assigning pin:', error);
-            showToast('Error assigning pin.');
-        }
+    // Create Tournament Functionality
+createTournamentButton.addEventListener('click', async function() {
+    console.log("Create tournament button clicked");  // Confirm button click
+
+    const tournamentName = document.getElementById('tournament-name').value.trim();
+    const tournamentRules = document.getElementById('tournament-rules1').value;
+
+    if (!tournamentName) {
+        showToast('Name The Thing!');
+        return;
     }
 
-    // Create Tournament Functionality
-    createTournamentButton.addEventListener('click', async function() {
-        const tournamentName = document.getElementById('tournament-name').value.trim();
-        const tournamentRules = document.getElementById('tournament-rules').value;
+    if (players.length < 2) {
+        showToast('Takes two to tango');
+        return;
+    }
 
-        if (!tournamentName) {
-            showToast('Please enter a tournament name.');
-            return;
-        }
-
-        if (players.length < 2) {
-            showToast('Please add at least two players to create a tournament.');
-            return;
-        }
-
-        // Assign a new tournament pin
-        const tournamentPin = await assignPin();
-        if (!tournamentPin) return;
-
-        // Prepare tournament data for admin update
-        const tournamentData = {
+    // Prepare tournament data for admin update, formatted as required
+    const tournamentData = {
+        httpMethod: "POST",
+        path: "/adminUpdate",
+        body: {
             tournamentPin: tournamentPin,
             tournamentName: tournamentName,
             tournamentFormat: tournamentRules,
             addedPlayers: players
-        };
+        }
+    };
 
-        // Send POST request to create tournament with admin update
-        fetch('/adminUpdate', {
+    // console.log("Data being sent to Lambda:", JSON.stringify(tournamentData, null, 2));
+
+    // Send POST request to create tournament with admin update
+    try {
+        const response = await fetch('https://mxyll1dlqi.execute-api.us-west-2.amazonaws.com/prod/adminUpdate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(tournamentData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            showToast('Tournament created successfully!');
-        })
-        .catch(error => {
-            console.error('Error creating tournament:', error);
-            showToast('An error occurred while creating the tournament.');
         });
+        const data = await response.json();
+
+        if (response.ok) {
+            showToast('Tournament created successfully!');
+            window.location.href = '/league.html';
+        } else {
+            console.error('Error creating tournament:', data);
+            showToast('An error occurred while creating the tournament.');
+        }
+    } catch (error) {
+        console.error('Error creating tournament:', error);
+        showToast('An error occurred while creating the tournament.');
+    }
     });
 
     // Return to Home Screen Functionality
@@ -117,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Update Player List in Remove Player Dropdown and Display
     function updatePlayerList() {
-        // Update player list in the UI
         playerListDiv.innerHTML = "";
         players.forEach(player => {
             const playerItem = document.createElement('div');
@@ -126,7 +122,6 @@ document.addEventListener('DOMContentLoaded', function() {
             playerListDiv.appendChild(playerItem);
         });
 
-        // Update remove player dropdown
         playerListSelect.innerHTML = '<option value="" disabled selected>Select a Player to Remove</option>';
         players.forEach(player => {
             const option = document.createElement('option');
@@ -143,10 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
         toast.textContent = message;
         document.body.appendChild(toast);
 
-        setTimeout(() => {
-            toast.classList.add('show');
-        }, 100);
-
+        setTimeout(() => { toast.classList.add('show'); }, 100);
         setTimeout(() => {
             toast.classList.remove('show');
             document.body.removeChild(toast);

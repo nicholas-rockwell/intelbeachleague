@@ -14,24 +14,32 @@
         
         <section class="join-tournament">
             <h2>Join A Tournament</h2>
+            <!-- Note: form ID and button ID match what JavaScript expects -->
             <form id="join-form">
                 <input type="text" id="tournament-pin-input" placeholder="Enter Tournament Pin" required>
                 <button type="submit" id="enter-league">Join</button>
             </form>
         </section>
+        
         <h2>OR</h2>
+        
         <section class="create-new-tournament">
-            <button id="create-tournament-button">Create New Tournament</button>
+            <!-- Note: Button ID matches JavaScript expectations -->
+            <button id="create-new-tournament">Create New Tournament</button>
         </section>
+        
         <br>
+        
         <section>
-            <h4>This tool was created by Nicholas Rockwell for a beach league at Intel Chandler, AZ. 
+            <h4>
+                This tool was created by Nicholas Rockwell for a beach league at Intel Chandler, AZ. 
                 By using this app, you agree that any entered data may be used for app improvements. 
                 Tournament records may not persist indefinitely. For a copy, please contact Nick.
             </h4>
         </section>
     </div>
 
+    <!-- Ensure the path to the JavaScript file is correct -->
     <script src="/js/index.js"></script>
 </body>
 </html>
