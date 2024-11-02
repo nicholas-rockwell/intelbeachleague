@@ -106,33 +106,58 @@ document.addEventListener('DOMContentLoaded', async function () {
     function renderAllMatches(matches) {
         const allMatchesSection = document.getElementById('current-matches');
         allMatchesSection.innerHTML = '';
-    
+
         matches.forEach((match, index) => {
             if (match.isScoreSubmitted) return;
-    
+
             const matchCard = document.createElement('div');
             matchCard.classList.add('match-card');
-    
-            matchCard.innerHTML = `
-                <div class="match-teams-container">
-                    <input type="number" min="0" max="99" class="score-input team1-score" placeholder="Score" />
-                    <div class="match-teams">
-                        <div class="match-team-name">${match.team1}</div>
-                        <div class="vs-text">vs</div>
-                        <div class="match-team-name">${match.team2}</div>
+
+            // If match.games exist, it's a best-of-three format
+            if (match.games && match.games.length) {
+                match.games.forEach((game, gameIndex) => {
+                    if (!game.isScoreSubmitted) {
+                        matchCard.innerHTML += `
+                            <div class="match-teams-container">
+                                <input type="number" min="0" max="99" class="score-input team1-score" placeholder="Score" />
+                                <div class="match-teams">
+                                    <div class="match-team-name">${match.team1}</div>
+                                    <div class="vs-text">vs</div>
+                                    <div class="match-team-name">${match.team2}</div>
+                                </div>
+                                <input type="number" min="0" max="99" class="score-input team2-score" placeholder="Score" />
+                            </div>
+                            <div class="score-submit-container">
+                                <button class="submit-score" data-team1="${match.team1}" data-team2="${match.team2}" data-index="${index}" data-gameindex="${gameIndex}">
+                                    Submit Game ${game.gameNumber} Score
+                                </button>
+                            </div>
+                        `;
+                    }
+                });
+            } else {
+                // Default to one-per-partner format
+                matchCard.innerHTML = `
+                    <div class="match-teams-container">
+                        <input type="number" min="0" max="99" class="score-input team1-score" placeholder="Score" />
+                        <div class="match-teams">
+                            <div class="match-team-name">${match.team1}</div>
+                            <div class="vs-text">vs</div>
+                            <div class="match-team-name">${match.team2}</div>
+                        </div>
+                        <input type="number" min="0" max="99" class="score-input team2-score" placeholder="Score" />
                     </div>
-                    <input type="number" min="0" max="99" class="score-input team2-score" placeholder="Score" />
-                </div>
-                <div class="score-submit-container">
-                    <button class="submit-score" data-team1="${match.team1}" data-team2="${match.team2}" data-index="${index}">
-                        Submit Score
-                    </button>
-                </div>
-            `;
-    
+                    <div class="score-submit-container">
+                        <button class="submit-score" data-team1="${match.team1}" data-team2="${match.team2}" data-index="${index}">
+                            Submit Match Score
+                        </button>
+                    </div>
+                `;
+            }
+
             allMatchesSection.appendChild(matchCard);
         });
-    
+
         attachScoreSubmitEvent();
     }
 
@@ -142,8 +167,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const team1 = button.dataset.team1;
                 const team2 = button.dataset.team2;
                 const index = button.dataset.index;
-                const team1Score = button.closest('.match-card').querySelector('.team1-score').value;
-                const team2Score = button.closest('.match-card').querySelector('.team2-score').value;
+                const gameIndex = button.dataset.gameindex; // For best-of-three matches
+
+                const matchCard = button.closest('.match-card');
+                const team1Score = matchCard.querySelector('.team1-score').value;
+                const team2Score = matchCard.querySelector('.team2-score').value;
 
                 if (!team1Score || !team2Score) {
                     alert('Please enter scores for both teams.');
@@ -155,7 +183,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                     gameData: {
                         team1,
                         team2,
-                        score: `${team1Score}-${team2Score}`
+                        score: `${team1Score}-${team2Score}`,
+                        ...(gameIndex !== undefined && { gameIndex: parseInt(gameIndex, 10) }) // Add gameIndex for best-of-three matches
                     }
                 };
 
@@ -166,17 +195,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function submitScores(gameData) {
         try {
+            const requestBody = {
+                httpMethod: 'POST',
+                path: '/updateScores',
+                body: gameData
+            };
+    
             const response = await fetch('https://mxyll1dlqi.execute-api.us-west-2.amazonaws.com/prod/updateScores', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(gameData)
+                body: JSON.stringify(requestBody)  // Ensure entire object is stringified here
             });
-
+    
             if (response.ok) {
                 alert('Scores submitted successfully!');
-                const updatedData = await fetchTournamentDataByPin();
-                renderPlayerList(sortPlayers(updatedData.players));
-                renderAllMatches(updatedData.matches);
             } else {
                 console.error('Error submitting scores:', await response.json());
                 alert('Error submitting scores.');
