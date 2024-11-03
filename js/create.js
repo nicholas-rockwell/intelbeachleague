@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             newPlayerInput.value = '';
             showToast(`Player ${newPlayerName} added successfully!`);
         } else {
-            showToast('Please enter a unique player name.');
+            showToast('Player already added, choose a unique name.');
         }
     });
 

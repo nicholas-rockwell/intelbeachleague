@@ -178,6 +178,20 @@ select {
     align-items: center;
 }
 
+#tournament-rules1 {
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    background-color: #1c1c1c;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 /* Buttons Section */
 #buttons-section {
     text-align: center;
