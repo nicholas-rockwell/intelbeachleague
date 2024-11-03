@@ -59,10 +59,22 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function sortPlayers(players) {
         players.sort((a, b) => (b.points - a.points) || (b.wins - a.wins));
+    
         players.forEach((player, index) => {
-            player.rank = `${index + 1}`;
+            const rank = index + 1;
+            const suffix = getOrdinalSuffix(rank);
+            player.rank = `${rank}<sup>${suffix}</sup>`;
         });
+    
         return players;
+    }
+    
+    // Helper function to determine the ordinal suffix
+    function getOrdinalSuffix(rank) {
+        if (rank % 10 === 1 && rank % 100 !== 11) return 'st';
+        if (rank % 10 === 2 && rank % 100 !== 12) return 'nd';
+        if (rank % 10 === 3 && rank % 100 !== 13) return 'rd';
+        return 'th';
     }
 
     function updateTournamentName(name) {
@@ -83,6 +95,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <div class="player-header">
                     <div class="player-rank">${player.rank}</div>
                     <div class="player-name">${player.name}</div>
+                    <div><span class="points">Score: </span><span class="player-points">${player.points}</span></div>
                 </div>
                 <div class="player-record" style="display: none;">
                     <strong>Record:</strong> Wins: ${player.wins}, Losses: ${player.losses}, Points: ${player.points}
@@ -160,6 +173,15 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         attachScoreSubmitEvent();
     }
+
+    const homeButton = document.querySelector('.home');
+    homeButton.addEventListener('click', () => {
+        // Remove tournamentPin from local storage
+        localStorage.removeItem('tournamentPin');
+            
+        // Redirect to index.html
+        window.location.href = '/index.html';
+    });
 
     function attachScoreSubmitEvent() {
         document.querySelectorAll('.submit-score').forEach(button => {

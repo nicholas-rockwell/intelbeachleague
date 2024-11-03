@@ -21,12 +21,24 @@ body {
 header {
     text-align: center;
     margin-bottom: 20px;
+    position: relative;
 }
 
 h1 {
     color: #ffd900e8;
     font-weight: bold;
     font-size: 2em;
+    display: inline-block;
+}
+
+.home {
+    text-align: left;
+    font-style: italic;
+    position: absolute;
+    left: 0;
+    cursor: pointer;
+    padding: 10px;
+    text-decoration: underline;
 }
 
 .ranking-header {
@@ -60,7 +72,7 @@ h1 {
 }
 
 .KOB {
-    font-size: 2.5em;
+    font-size: 2em;
     font-style: italic;
     color: #FFD700;
     text-align: center;
@@ -117,20 +129,33 @@ h1 {
 
 .player-rank {
     color: #FFD700;
-    font-size: 1.2em;
+    font-size: 1.5em;
     font-weight: bold;
     flex-shrink: 0;
     text-align: left;
     margin-right: auto;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.7);
 }
 
 .player-name {
     position: absolute;
     font-weight: bold;
-    font-size: 1.2em;
+    font-size: 1.5em;
+    text-transform: uppercase;
     color: #FFD700;
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.7);
     animation: dualPulseGlow 6s infinite alternate;
+}
+
+.points {
+    font-style: italic;
+    font-size: 1em;
+}
+
+.player-points {
+    font-size: 1.2em;
+    color: #FFD700;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.7);
 }
 
 @keyframes dualPulseGlow {
@@ -258,7 +283,7 @@ input[type="number"]::-webkit-inner-spin-button {
         position: absolute;
     }
 
-    .player-header .player-name {
+    .player-header .player-name .player-points {
         font-size: 1.3em;
     }
 
