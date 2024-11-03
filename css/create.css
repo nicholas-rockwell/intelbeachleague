@@ -141,6 +141,7 @@ select {
 
 #remove-player select {
     margin-bottom: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Player List Display */
@@ -155,6 +156,11 @@ select {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+}
+
+select option {
+    background-color: #333; /* Sets the dropdown options' background color */
+    color: white; /* Sets the text color in dropdown options */
 }
 
 .player-item {
@@ -183,10 +189,18 @@ select {
     width: 100%;
     max-width: 500px;
     padding: 20px;
-    background-color: #1c1c1c;
     border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#remove-player-select {
+    border-radius: 10px;
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;

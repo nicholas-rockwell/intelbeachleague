@@ -37,6 +37,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+        // Add an event listener to detect Enter key press in the input field
+    newPlayerInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent default Enter key action if inside a form
+            addPlayerButton.click(); // Trigger the button click
+        }
+    });
+
     // Remove Player Functionality
     removePlayerButton.addEventListener('click', function() {
         const selectedPlayer = playerListSelect.value;
@@ -122,7 +130,7 @@ createTournamentButton.addEventListener('click', async function() {
             playerListDiv.appendChild(playerItem);
         });
 
-        playerListSelect.innerHTML = '<option value="" disabled selected>Select a Player to Remove</option>';
+        playerListSelect.innerHTML = '<option value="" disabled selected class="removePlayer">Select a Player to Remove</option>';
         players.forEach(player => {
             const option = document.createElement('option');
             option.value = player;
