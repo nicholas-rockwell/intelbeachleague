@@ -27,18 +27,23 @@ header {
 h1 {
     color: #ffd900e8;
     font-weight: bold;
-    font-size: 2em;
+    font-size: clamp(.5em, 4vw, 4em); /* Responsive scaling */
     display: inline-block;
 }
 
 .home {
     text-align: left;
     font-style: italic;
+    font-size: clamp(.5em, 3vw, 3em); /* Responsive scaling */
     position: absolute;
     left: 0;
     cursor: pointer;
     padding: 10px;
     text-decoration: underline;
+}
+
+#tournament-pin-display {
+    font-size: clamp(.5em, 3vw, 4em); /* Responsive scaling */
 }
 
 .ranking-header {
@@ -48,12 +53,13 @@ h1 {
     position: relative;
     gap: 10px;
     text-align: center;
+    font-size: clamp(0.5em, 3vw, 4em); /* Responsive scaling */
 }
 
 .smaller-ranks-h2 {
     color: #ffd900e8;
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: clamp(0.5em, 3.5vw, 4em); /* Responsive scaling */
     text-decoration: underline;
     text-align: left;
     margin-bottom: -10px;
@@ -64,7 +70,7 @@ h1 {
 .center-h2 {
     color: #FFD700;
     font-weight: bold;
-    font-size: 1.8em;
+    font-size: clamp(0.5em, 4vw, 4em); /* Responsive scaling */
     text-align: center;
     text-decoration: underline;
     margin: 0 auto;
@@ -72,7 +78,7 @@ h1 {
 }
 
 .KOB {
-    font-size: 2em;
+    font-size: clamp(.5em, 5vw, 8em); /* Responsive scaling */
     font-style: italic;
     color: #FFD700;
     text-align: center;
@@ -92,7 +98,7 @@ h1 {
 .centered-title {
     color: #FFD700;
     font-weight: bold;
-    font-size: 1.8em;
+    font-size: clamp(0.5em, 4vw, 7em); /* Responsive scaling */
     text-align: center;
     text-decoration: underline;
 }
