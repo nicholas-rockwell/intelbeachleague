@@ -36,7 +36,6 @@ h1 {
     font-style: italic;
     font-size: clamp(0.5em, 2vw, 3em); /* Responsive scaling */
     position: absolute;
-    left: 42%;
     cursor: pointer;
     padding: 10px;
     text-decoration: underline;
@@ -136,11 +135,15 @@ h1 {
 .player-name {
     position: absolute;
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: clamp(1em, 4vw, 5em); /* Responsive scaling */
     text-transform: uppercase;
     color: #FFD700;
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.7);
     animation: dualPulseGlow 6s infinite alternate;
+}
+
+ul {
+    list-style-type: none;
 }
 
 .points {

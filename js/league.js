@@ -38,15 +38,58 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function parseDynamoDBResponse(data) {
         const parsedBody = JSON.parse(data.body);
+    
+        // Initialize players with empty history arrays
+        const players = parsedBody.players.map(player => ({
+            name: player.name,
+            wins: player.wins,
+            losses: player.losses,
+            points: player.points,
+            history: []
+        }));
+    
+        // Process each match and update players' history
+        parsedBody.weekInfo.matches.forEach(match => {
+            if (match.isScoreSubmitted) {
+                // Determine the scores and the winner
+                const [team1Score, team2Score] = match.score ? match.score.split('-').map(Number) : [0, 0];
+                const team1Players = match.team1.split('/');
+                const team2Players = match.team2.split('/');
+                const winner = team1Score > team2Score ? match.team1 : match.team2;
+    
+                // Loop through team1 players and update their match history with partner info
+                team1Players.forEach(playerName => {
+                    const player = players.find(p => p.name === playerName);
+                    if (player) {
+                        const partner = team1Players.find(name => name !== playerName); // Identify partner
+                        player.history.push({
+                            opponent: match.team2,
+                            score: `${team1Score}-${team2Score}`,
+                            result: team1Score > team2Score ? "Win" : "Loss",
+                            partner: partner
+                        });
+                    }
+                });
+    
+                // Loop through team2 players and update their match history with partner info
+                team2Players.forEach(playerName => {
+                    const player = players.find(p => p.name === playerName);
+                    if (player) {
+                        const partner = team2Players.find(name => name !== playerName); // Identify partner
+                        player.history.push({
+                            opponent: match.team1,
+                            score: `${team2Score}-${team1Score}`, // Opponent's score first for perspective
+                            result: team2Score > team1Score ? "Win" : "Loss",
+                            partner: partner
+                        });
+                    }
+                });
+            }
+        });
+    
         return {
             tournamentName: parsedBody.tournamentName || 'Unnamed Tournament',
-            players: parsedBody.players.map(player => ({
-                name: player.name,
-                wins: player.wins,
-                losses: player.losses,
-                points: player.points,
-                history: player.history || []
-            })),
+            players,
             matches: parsedBody.weekInfo.matches.map(match => ({
                 team1: match.team1,
                 team2: match.team2,
@@ -87,10 +130,22 @@ document.addEventListener('DOMContentLoaded', async function () {
     function renderPlayerList(players) {
         const playerList = document.getElementById('player-list');
         playerList.innerHTML = '';
-    
+
         players.forEach(player => {
             const listItem = document.createElement('li');
             listItem.className = 'player';
+
+            // Generate match history HTML
+            const matchHistoryHtml = player.history.map(match => `
+                <br>
+                <li>
+                    <strong>Partner:</strong> ${match.partner}<br>
+                    <strong>Opponent:</strong> ${match.opponent}<br>
+                    <strong>Score:</strong> ${match.score}<br>
+                    <strong>Result:</strong> ${match.result}
+                </li>
+            `).join('');
+
             listItem.innerHTML = `
                 <div class="player-header">
                     <div class="player-rank">${player.rank}</div>
@@ -98,7 +153,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <div><span class="points">Score: </span><span class="player-points">${player.points}</span></div>
                 </div>
                 <div class="player-record" style="display: none;">
-                    <strong>Record:</strong> Wins: ${player.wins}, Losses: ${player.losses}, Points: ${player.points}
+                    <br>
+                    <strong>Record:</strong> 
+                    <pre>  Wins: ${player.wins}</pre>
+                    <pre>  Losses: ${player.losses}</pre>
+                    <br>
+                    <strong>Match History:</strong>
+                <ul>${matchHistoryHtml || '<li>No matches played yet.</li>'}</ul>
                 </div>
             `;
     
@@ -174,14 +235,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         attachScoreSubmitEvent();
     }
 
-    const homeButton = document.querySelector('.home');
-    homeButton.addEventListener('click', () => {
-        // Remove tournamentPin from local storage
-        localStorage.removeItem('tournamentPin');
+    // POSSIBLE HOME BUTTON TO ALLOW USERS TO CHECK OTHER TOURNAMENT?
+    // const homeButton = document.querySelector('.home');
+    // homeButton.addEventListener('click', () => {
+    //     // Remove tournamentPin from local storage
+    //     localStorage.removeItem('tournamentPin');
             
-        // Redirect to index.html
-        window.location.href = '/index.html';
-    });
+    //     // Redirect to index.html
+    //     window.location.href = '/index.html';
+    // });
 
     function attachScoreSubmitEvent() {
         document.querySelectorAll('.submit-score').forEach(button => {
