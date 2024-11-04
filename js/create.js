@@ -103,15 +103,15 @@ createTournamentButton.addEventListener('click', async function() {
         const data = await response.json();
 
         if (response.ok) {
-            showToast('Tournament created successfully!');
+            //showToast('Tournament created successfully!');
             window.location.href = '/league.html';
         } else {
             console.error('Error creating tournament:', data);
-            showToast('An error occurred while creating the tournament.');
+            //showToast('An error occurred while creating the tournament.');
         }
     } catch (error) {
         console.error('Error creating tournament:', error);
-        showToast('An error occurred while creating the tournament.');
+        //showToast('An error occurred while creating the tournament.');
     }
     });
 
