@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (error) {
             console.error('Error fetching tournament data:', error);
             alert('Failed to load tournament data. Please check the pin and try again.');
+            window.location.href = '/index.html';
         }
     }
 
@@ -50,41 +51,45 @@ document.addEventListener('DOMContentLoaded', async function () {
     
         // Process each match and update players' history
         parsedBody.weekInfo.matches.forEach(match => {
-            if (match.isScoreSubmitted) {
-                // Determine the scores and the winner
-                const [team1Score, team2Score] = match.score ? match.score.split('-').map(Number) : [0, 0];
-                const team1Players = match.team1.split('/');
-                const team2Players = match.team2.split('/');
-                const winner = team1Score > team2Score ? match.team1 : match.team2;
+            match.games.forEach(game => {
+                if (game.isScoreSubmitted) {
+                    // Determine the scores and the winner for each game
+                    const [team1Score, team2Score] = game.score ? game.score.split('-').map(Number) : [0, 0];
+                    const team1Players = match.team1.split('/');
+                    const team2Players = match.team2.split('/');
+                    const winner = team1Score > team2Score ? match.team1 : match.team2;
     
-                // Loop through team1 players and update their match history with partner info
-                team1Players.forEach(playerName => {
-                    const player = players.find(p => p.name === playerName);
-                    if (player) {
-                        const partner = team1Players.find(name => name !== playerName); // Identify partner
-                        player.history.push({
-                            opponent: match.team2,
-                            score: `${team1Score}-${team2Score}`,
-                            result: team1Score > team2Score ? "Win" : "Loss",
-                            partner: partner
-                        });
-                    }
-                });
-    
-                // Loop through team2 players and update their match history with partner info
-                team2Players.forEach(playerName => {
-                    const player = players.find(p => p.name === playerName);
-                    if (player) {
-                        const partner = team2Players.find(name => name !== playerName); // Identify partner
-                        player.history.push({
-                            opponent: match.team1,
-                            score: `${team2Score}-${team1Score}`, // Opponent's score first for perspective
-                            result: team2Score > team1Score ? "Win" : "Loss",
-                            partner: partner
-                        });
-                    }
-                });
-            }
+                    // Loop through team1 players and update their match history with partner info
+                    team1Players.forEach(playerName => {
+                        const player = players.find(p => p.name === playerName);
+                        if (player) {
+                            const partner = team1Players.find(name => name !== playerName); // Identify partner
+                            player.history.push({
+                                opponent: match.team2,
+                                score: `${team1Score} - ${team2Score}`,
+                                result: team1Score === team2Score ? "-" : (team1Score > team2Score ? "Win" : "Loss"),
+                                partner: partner,
+                                gameNumber: game.gameNumber
+                            });
+                        }
+                    });
+                    
+                    // Loop through team2 players and update their match history with partner info
+                    team2Players.forEach(playerName => {
+                        const player = players.find(p => p.name === playerName);
+                        if (player) {
+                            const partner = team2Players.find(name => name !== playerName); // Identify partner
+                            player.history.push({
+                                opponent: match.team1,
+                                score: `${team2Score}-${team1Score}`, // Opponent's score first for perspective
+                                result: team1Score === team2Score ? "-" : (team2Score > team1Score ? "Win" : "Loss"),
+                                partner: partner,
+                                gameNumber: game.gameNumber
+                            });
+                        }
+                    });
+                }
+            });
         });
     
         return {
@@ -99,6 +104,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             weekInfo: parsedBody.weekInfo || {}
         };
     }
+    
 
     function sortPlayers(players) {
         players.sort((a, b) => (b.points - a.points) || (b.wins - a.wins));
@@ -136,13 +142,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             listItem.className = 'player';
 
             // Generate match history HTML
-            const matchHistoryHtml = player.history.map(match => `
+            const matchHistoryHtml = player.history.map(match => `\
                 <br>
                 <li>
-                    <strong>Partner:</strong> ${match.partner}<br>
-                    <strong>Opponent:</strong> ${match.opponent}<br>
-                    <strong>Score:</strong> ${match.score}<br>
-                    <strong>Result:</strong> ${match.result}
+                    <pre>  <strong>Partner:</strong> ${match.partner}<br></pre>
+                    <pre>  <strong>Opponent:</strong> ${match.opponent}<br></pre>
+                    <pre>  <strong>Score:</strong> ${match.score}<br></pre>
+                    <pre>  <strong>Result:</strong> ${match.result}</pre>
                 </li>
             `).join('');
 
@@ -193,13 +199,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (!game.isScoreSubmitted) {
                     matchCard.innerHTML += `
                         <div class="match-teams-container">
-                            <input type="number" min="0" max="99" class="score-input team1-score" placeholder="Score" />
+                            <input type="number" min="0" max="99" class="score-input team1-score" placeholder="" />
                             <div class="match-teams">
                                 <div class="match-team-name">${match.team1}</div>
                                 <div class="vs-text">vs</div>
                                 <div class="match-team-name">${match.team2}</div>
                             </div>
-                            <input type="number" min="0" max="99" class="score-input team2-score" placeholder="Score" />
+                            <input type="number" min="0" max="99" class="score-input team2-score" placeholder="" />
                         </div>
                         <div class="score-submit-container">
                             <button class="submit-score" 
@@ -207,7 +213,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                                 data-team2="${match.team2}" 
                                 data-index="${index}" 
                                 data-gameindex="${gameIndex}">
-                                Submit Game ${game.gameNumber} Score
+                                Submit Score
                             </button>
                         </div>
                     `;
@@ -340,7 +346,7 @@ async function addNewGame(team1, team2) {
     };
 
     try {
-        const response = await fetch('https://5n1op4gak6.execute-api.us-west-2.amazonaws.com/prodaddNewGame', {
+        const response = await fetch('https://5n1op4gak6.execute-api.us-west-2.amazonaws.com/prod/addNewGame', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestBody)
@@ -404,7 +410,8 @@ async function addNewGame(team1, team2) {
             });
     
             if (response.ok) {
-                alert('Scores submitted successfully!');
+                console.log("Score submitted.")
+                window.location.href = '/league.html';
             } else {
                 console.error('Error submitting scores:', await response.json());
                 alert('Error submitting scores.');

@@ -226,7 +226,6 @@ ul {
 
 .score-input {
     width: 100%;
-    height: 100%;
     padding: 8px;
     border-radius: 8px;
     border: none;
@@ -235,20 +234,24 @@ ul {
     font-size: 1rem;
     text-align: center;
     box-shadow: inset 0 0 8px rgba(255, 215, 0, 0.7);
+    aspect-ratio: 1 / 1; /* Ensures square aspect ratio */
 }
 
 /* Position the left and right score inputs */
 .score-input.team1-score {
     margin-right: auto;
-    width: 10%;
-    height: 6em;
+    width: 10vw; /* Responsive width */
+    min-width: 40px; /* Sets a minimum width to ensure readability */
+    max-width: 100px; /* Optional: Limits size on larger screens */
 }
 
 .score-input.team2-score {
     margin-left: auto;
-    width: 10%;
-    height: 6em;
+    width: 10vw; /* Responsive width */
+    min-width: 40px; /* Sets a minimum width to ensure readability */
+    max-width: 100px; /* Optional: Limits size on larger screens */
 }
+
 
 .score-submit-container {
     margin-top: 10px;
