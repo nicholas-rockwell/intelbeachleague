@@ -37,13 +37,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-        // Add an event listener to detect Enter key press in the input field
+    // Add an event listener to detect Enter key press in the input field
     newPlayerInput.addEventListener('keypress', function(event) {
         if (event.key === 'Enter') {
             event.preventDefault(); // Prevent default Enter key action if inside a form
             addPlayerButton.click(); // Trigger the button click
         }
     });
+
+    // Remove autocomplete
+    document.querySelectorAll('input').forEach(input => {
+        input.setAttribute('autocomplete', 'off');
+    });    
 
     // Remove Player Functionality
     removePlayerButton.addEventListener('click', function() {
@@ -61,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Create Tournament Functionality
-createTournamentButton.addEventListener('click', async function() {
+    createTournamentButton.addEventListener('click', async function() {
     console.log("Create tournament button clicked");  // Confirm button click
 
     const tournamentName = document.getElementById('tournament-name').value.trim();
@@ -89,11 +94,9 @@ createTournamentButton.addEventListener('click', async function() {
         }
     };
 
-    // console.log("Data being sent to Lambda:", JSON.stringify(tournamentData, null, 2));
-
     // Send POST request to create tournament with admin update
     try {
-        const response = await fetch('https://mxyll1dlqi.execute-api.us-west-2.amazonaws.com/prod/adminUpdate', {
+        const response = await fetch('https://5n1op4gak6.execute-api.us-west-2.amazonaws.com/prod/adminUpdate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

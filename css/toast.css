@@ -1,7 +1,7 @@
 /* Toast Notification Styles */
 .toast {
     visibility: hidden;
-    min-width: 30vw;
+    width: 40px;
     background-color: #797979;
     color: #fff;
     text-align: center;
@@ -9,9 +9,8 @@
     padding: 16px;
     position: fixed;
     z-index: 100;
-    left: 50%;
+    left: 49%;
     bottom: 25%;
-    font-size: 1.2em;
     opacity: 0;
     transition: opacity 0.5s ease-in-out, bottom 0.5s ease-in-out;
 }
@@ -20,12 +19,4 @@
     visibility: visible;
     opacity: 1;
     bottom: 25%;
-}
-
-/* Responsive Styles for Toast Notification */
-@media (max-width: 600px) {
-    .toast {
-        font-size: 4vw;
-        min-width: 50vw;
-    }
 }

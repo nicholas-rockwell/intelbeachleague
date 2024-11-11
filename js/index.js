@@ -1,5 +1,5 @@
 // Define the base URL for the API endpoints
-const API_BASE_URL = 'https://mxyll1dlqi.execute-api.us-west-2.amazonaws.com/prod';
+const API_BASE_URL = 'https://5n1op4gak6.execute-api.us-west-2.amazonaws.com/prod';
 
 // Function to perform fetch with a timeout
 async function fetchWithTimeout(url, options, timeout = 15000) { // 15 seconds default timeout
@@ -43,7 +43,7 @@ document.getElementById('enter-league').addEventListener('click', async function
     };
 
     try {
-        const response = await fetch(`https://mxyll1dlqi.execute-api.us-west-2.amazonaws.com/prod/checkPin`, {
+        const response = await fetch(`https://5n1op4gak6.execute-api.us-west-2.amazonaws.com/prod/checkPin`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

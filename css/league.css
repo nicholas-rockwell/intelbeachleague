@@ -27,14 +27,13 @@ header {
 h1 {
     color: #ffd900e8;
     font-weight: bold;
-
     display: inline-block;
 }
 
 .home {
     text-align: center;
     font-style: italic;
-    font-size: clamp(0.5em, 2vw, 3em); /* Responsive scaling */
+    font-size: clamp(0.5em, 2vw, 3em);
     position: absolute;
     cursor: pointer;
     padding: 10px;
@@ -42,40 +41,43 @@ h1 {
 }
 
 #tournament-pin-display {
-    font-size: clamp(1em, 2vw, 4em); /* Responsive scaling */
+    font-size: clamp(1em, 2vw, 4em);
 }
 
+/* ========================
+   RANKING HEADER
+======================== */
 .ranking-header {
     display: flex;
     align-items: center;
     justify-content: center;
     padding-bottom: 10px;
     position: relative;
-    text-align: center;
-    font-size: clamp(1em, 2vw, 3em); /* Responsive scaling */
+    font-size: clamp(1em, 2vw, 3em);
+    max-width: 100%;
+    margin: auto;
 }
 
 .smaller-ranks-h2 {
     color: #ffd900e8;
     font-weight: bold;
-    font-size: clamp(1em, 2vw, 3em); /* Responsive scaling */
+    font-size: clamp(1em, 2vw, 2.5em);
     text-decoration: underline;
     text-align: left;
     position: absolute;
-    left: 0; /* Aligns Ranks to the far left */
+    left: 0;
 }
 
 .center-h2 {
     color: #FFD700;
     font-weight: bold;
-    font-size: clamp(1em, 2vw, 3em); /* Responsive scaling */
+    font-size: clamp(1em, 2vw, 3em);
     text-align: center;
     text-decoration: underline;
-    position: relative; /* Keeps centered regardless of Ranks alignment */
 }
 
 .KOB {
-    font-size: clamp(1em, 2vw, 3em); /* Responsive scaling */
+    font-size: clamp(1em, 5vw, 7em);
     font-style: italic;
     color: #FFD700;
     text-align: center;
@@ -86,7 +88,7 @@ h1 {
 .centered-title {
     color: #FFD700;
     font-weight: bold;
-    font-size: clamp(1em, 2vw, 3em); /* Responsive scaling */
+    font-size: clamp(1em, 2vw, 3em);
     text-align: center;
     text-decoration: underline;
 }
@@ -107,7 +109,7 @@ h1 {
 .player {
     background-color: rgba(255, 255, 255, 0.1);
     padding: 10px;
-    font-size: clamp(1em, 2vw, 3em); /* Responsive scaling */
+    font-size: clamp(1em, 2vw, 3em);
     margin-bottom: 10px;
     cursor: pointer;
     border-radius: 5px;
@@ -135,7 +137,7 @@ h1 {
 .player-name {
     position: absolute;
     font-weight: bold;
-    font-size: clamp(1em, 4vw, 5em); /* Responsive scaling */
+    font-size: clamp(1em, 4vw, 5em);
     text-transform: uppercase;
     color: #FFD700;
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.7);
@@ -193,17 +195,18 @@ ul {
     width: 100%;
     margin: 10px auto;
     text-align: center;
-    font-size: clamp(1em, 2vw, 3em); /* Responsive scaling */
+    font-size: clamp(1em, 2vw, 3em);
 }
 
 .match-teams-container {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    height: 100%;
     padding: 0 20px;
-    margin-bottom: 10px;
+    border: 2px solid #020202;
+    border-radius: 8px;
 }
 
 .match-team-name {
@@ -222,8 +225,8 @@ ul {
 }
 
 .score-input {
-    width: 70px;
-    height: 50px;
+    width: 100%;
+    height: 100%;
     padding: 8px;
     border-radius: 8px;
     border: none;
@@ -237,14 +240,14 @@ ul {
 /* Position the left and right score inputs */
 .score-input.team1-score {
     margin-right: auto;
-    width: 75px;
-    height: 75px;
+    width: 10%;
+    height: 6em;
 }
 
 .score-input.team2-score {
     margin-left: auto;
-    width: 75px;
-    height: 75px;
+    width: 10%;
+    height: 6em;
 }
 
 .score-submit-container {
@@ -255,6 +258,7 @@ ul {
 }
 
 .score-submit-container button {
+    margin-bottom: 10px;
     padding: 8px 16px;
     background: #FFD700;
     border: none;
@@ -264,7 +268,46 @@ ul {
     font-weight: bold;
     transition: background 0.3s, transform 0.3s;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-    font-size: clamp(1em, 2vw, 3em); /* Responsive scaling */
+    font-size: clamp(1em, 1vw, 2em);
+}
+
+/* ========================
+   ADD GAME BUTTON
+======================== */
+#add-game {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.add-game {  
+    padding: 8px 16px;
+    background: #FFD700;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    font-size: clamp(1em, 2vw, 3em);
+}
+
+.add-game:hover {
+    background-color: #FFC300;
+}
+
+#about {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: lighter;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    color: #FFC300;
 }
 
 /* Remove spin arrows from number inputs */
@@ -273,6 +316,63 @@ input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+/* Add Game popup */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    color: #ffd900;
+    text-align: center;
+}
+
+.modal-content label {
+    font-size: 1.1em;
+    color: #FFD700;
+    margin: 10px 0;
+}
+
+.modal-content select {
+    margin: 10px 0;
+    padding: 8px;
+    font-size: 1em;
+    width: 100%;
+}
+
+.modal-content button {
+    background-color: #FFD700;
+    margin: 10px 0;
+    padding: 8px;
+    font-weight: bold;
+    font-size: 1em;
+    width: 100%;
+}
+
+.close-modal {
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
 
 /* ========================
    RESPONSIVE STYLES
@@ -284,7 +384,6 @@ input[type="number"]::-webkit-inner-spin-button {
 
     .center-h2 {
         font-size: 1.4em;
-        position: absolute;
     }
 
     .player-header .player-name .player-points {

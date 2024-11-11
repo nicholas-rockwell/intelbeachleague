@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         };
 
         try {
-            const response = await fetch(`https://mxyll1dlqi.execute-api.us-west-2.amazonaws.com/prod/getTournamentData`, {
+            const response = await fetch(`https://5n1op4gak6.execute-api.us-west-2.amazonaws.com/prod/getTournamentData`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestBody)
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <pre>  Losses: ${player.losses}</pre>
                     <br>
                     <strong>Match History:</strong>
-                <ul>${matchHistoryHtml || '<li>No matches played yet.</li>'}</ul>
+                <ul>${matchHistoryHtml || '<li><pre>  No matches played yet.</pre></li>'}</ul>
                 </div>
             `;
     
@@ -178,62 +178,65 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function renderAllMatches(matches) {
-        const allMatchesSection = document.getElementById('current-matches');
-        allMatchesSection.innerHTML = '';
+    const allMatchesSection = document.getElementById('current-matches');
+    allMatchesSection.innerHTML = '';
 
-        matches.forEach((match, index) => {
-            if (match.isScoreSubmitted) return;
+    matches.forEach((match, index) => {
+        if (match.isScoreSubmitted) return;
 
-            const matchCard = document.createElement('div');
-            matchCard.classList.add('match-card');
+        const matchCard = document.createElement('div');
+        matchCard.classList.add('match-card');
 
-            // If match.games exist, it's a best-of-three format
-            if (match.games && match.games.length) {
-                match.games.forEach((game, gameIndex) => {
-                    if (!game.isScoreSubmitted) {
-                        matchCard.innerHTML += `
-                            <div class="match-teams-container">
-                                <input type="number" min="0" max="99" class="score-input team1-score" placeholder="Score" />
-                                <div class="match-teams">
-                                    <div class="match-team-name">${match.team1}</div>
-                                    <div class="vs-text">vs</div>
-                                    <div class="match-team-name">${match.team2}</div>
-                                </div>
-                                <input type="number" min="0" max="99" class="score-input team2-score" placeholder="Score" />
+        // Check for "best of three" by looking for the games array
+        if (match.games && match.games.length) {
+            match.games.forEach((game, gameIndex) => {
+                if (!game.isScoreSubmitted) {
+                    matchCard.innerHTML += `
+                        <div class="match-teams-container">
+                            <input type="number" min="0" max="99" class="score-input team1-score" placeholder="Score" />
+                            <div class="match-teams">
+                                <div class="match-team-name">${match.team1}</div>
+                                <div class="vs-text">vs</div>
+                                <div class="match-team-name">${match.team2}</div>
                             </div>
-                            <div class="score-submit-container">
-                                <button class="submit-score" data-team1="${match.team1}" data-team2="${match.team2}" data-index="${index}" data-gameindex="${gameIndex}">
-                                    Submit Game ${game.gameNumber} Score
-                                </button>
-                            </div>
-                        `;
-                    }
-                });
-            } else {
-                // Default to one-per-partner format
-                matchCard.innerHTML = `
-                    <div class="match-teams-container">
-                        <input type="number" min="0" max="99" class="score-input team1-score" placeholder="Score" />
-                        <div class="match-teams">
-                            <div class="match-team-name">${match.team1}</div>
-                            <div class="vs-text">vs</div>
-                            <div class="match-team-name">${match.team2}</div>
+                            <input type="number" min="0" max="99" class="score-input team2-score" placeholder="Score" />
                         </div>
-                        <input type="number" min="0" max="99" class="score-input team2-score" placeholder="Score" />
+                        <div class="score-submit-container">
+                            <button class="submit-score" 
+                                data-team1="${match.team1}" 
+                                data-team2="${match.team2}" 
+                                data-index="${index}" 
+                                data-gameindex="${gameIndex}">
+                                Submit Game ${game.gameNumber} Score
+                            </button>
+                        </div>
+                    `;
+                }
+            });
+        } else {
+            // Handle single match format
+            matchCard.innerHTML = `
+                <div class="match-teams-container">
+                    <input type="number" min="0" max="99" class="score-input team1-score" placeholder="Score" />
+                    <div class="match-teams">
+                        <div class="match-team-name">${match.team1}</div>
+                        <div class="vs-text">vs</div>
+                        <div class="match-team-name">${match.team2}</div>
                     </div>
-                    <div class="score-submit-container">
-                        <button class="submit-score" data-team1="${match.team1}" data-team2="${match.team2}" data-index="${index}">
-                            Submit Match Score
-                        </button>
-                    </div>
-                `;
-            }
+                    <input type="number" min="0" max="99" class="score-input team2-score" placeholder="Score" />
+                </div>
+                <div class="score-submit-container">
+                    <button class="submit-score" data-team1="${match.team1}" data-team2="${match.team2}" data-index="${index}">
+                        Submit Match Score
+                    </button>
+                </div>
+            `;
+        }
 
-            allMatchesSection.appendChild(matchCard);
-        });
-
-        attachScoreSubmitEvent();
-    }
+        allMatchesSection.appendChild(matchCard);
+    });
+    attachScoreSubmitEvent();
+}
 
     // POSSIBLE HOME BUTTON TO ALLOW USERS TO CHECK OTHER TOURNAMENT?
     // const homeButton = document.querySelector('.home');
@@ -244,6 +247,115 @@ document.addEventListener('DOMContentLoaded', async function () {
     //     // Redirect to index.html
     //     window.location.href = '/index.html';
     // });
+
+
+    // Add Game Button
+const addButton = document.querySelector('.add-game');
+addButton.addEventListener('click', async () => {
+    const tournamentData = await fetchTournamentDataByPin();
+
+    if (!tournamentData) {
+        alert("Could not load tournament data. Please try again.");
+        return;
+    }
+
+    // Show a modal or form to select players for both teams
+    const modal = document.createElement('div');
+    modal.classList.add('modal');
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>Select Players for New Game</h3>
+            <label>Team 1, Player 1:</label>
+            <select id="team1-player1-select"></select>
+            <label>Team 1, Player 2:</label>
+            <select id="team1-player2-select"></select>
+            <label>Team 2, Player 1:</label>
+            <select id="team2-player1-select"></select>
+            <label>Team 2, Player 2:</label>
+            <select id="team2-player2-select"></select>
+            <button class="submit-new-game">Add Game</button>
+            <button class="close-modal">Cancel</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Populate player selection options
+    const playerSelectors = [
+        document.getElementById('team1-player1-select'),
+        document.getElementById('team1-player2-select'),
+        document.getElementById('team2-player1-select'),
+        document.getElementById('team2-player2-select')
+    ];
+
+    tournamentData.players.forEach(player => {
+        playerSelectors.forEach(select => {
+            const option = document.createElement('option');
+            option.value = player.name;
+            option.textContent = player.name;
+            select.appendChild(option);
+        });
+    });
+
+    // Close modal functionality
+    document.querySelector('.close-modal').addEventListener('click', () => {
+        document.body.removeChild(modal);
+    });
+
+    // Handle submit new game
+    document.querySelector('.submit-new-game').addEventListener('click', async () => {
+        const selectedPlayers = playerSelectors.map(select => select.value);
+        
+        // Check for duplicate players
+        const uniquePlayers = new Set(selectedPlayers);
+        if (uniquePlayers.size !== selectedPlayers.length) {
+            alert('No duplicate players please');
+            return;
+        }
+
+        const team1 = `${selectedPlayers[0]}/${selectedPlayers[1]}`;
+        const team2 = `${selectedPlayers[2]}/${selectedPlayers[3]}`;
+
+        // Send the new game data to the Lambda function
+        await addNewGame(team1, team2);
+        // Close the modal
+        document.body.removeChild(modal);
+        // Re-fetch and render updated tournament data
+        const updatedTournamentData = await fetchTournamentDataByPin();
+        if (updatedTournamentData) {
+            renderAllMatches(updatedTournamentData.weekInfo.matches);
+        }
+    });
+});
+
+// Function to send new game data to Lambda
+async function addNewGame(team1, team2) {
+    const requestBody = {
+        httpMethod: 'POST',
+        path: '/addNewGame',
+        body: {
+            tournamentPin: localStorage.getItem('tournamentPin'),
+            team1,
+            team2
+        }
+    };
+
+    try {
+        const response = await fetch('https://5n1op4gak6.execute-api.us-west-2.amazonaws.com/prodaddNewGame', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (response.ok) {
+            console.log('New game added successfully.');
+        } else {
+            console.error('Failed to add new game:', await response.text());
+        }
+    } catch (error) {
+        console.error('Error adding new game:', error);
+    }
+}
+
 
     function attachScoreSubmitEvent() {
         document.querySelectorAll('.submit-score').forEach(button => {
@@ -285,7 +397,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 body: gameData
             };
     
-            const response = await fetch('https://mxyll1dlqi.execute-api.us-west-2.amazonaws.com/prod/updateScores', {
+            const response = await fetch('https://5n1op4gak6.execute-api.us-west-2.amazonaws.com/prod/updateScores', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(requestBody)  // Ensure entire object is stringified here
