@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const tournamentPin = localStorage.getItem('tournamentPin');
     if (!tournamentPin) {
         alert('No tournament pin found. Please try again on the homepage.');
-        window.location.href = '/index';
+        window.location.href = '/index.html';
         return;
     }
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (error) {
             console.error('Error fetching tournament data:', error);
             alert('Failed to load tournament data. Please check the pin and try again.');
-            window.location.href = '/IntelBeachLeague';
+            window.location.href = '/index.html';
         }
     }
 
@@ -411,7 +411,7 @@ async function addNewGame(team1, team2) {
     
             if (response.ok) {
                 console.log("Score submitted.")
-                window.location.href = '/league';
+                window.location.href = '/league.html';
             } else {
                 console.error('Error submitting scores:', await response.json());
                 alert('Error submitting scores.');

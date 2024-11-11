@@ -33,7 +33,7 @@ document.getElementById('enter-league').addEventListener('click', async function
             const result = await response.json();
             console.log("Pin verified:", result);
             localStorage.setItem('tournamentPin', tournamentPin);
-            window.location.href = '/league';
+            window.location.href = '/league.html';
         } else {
             console.error("Failed to verify pin:", response.status);
             alert("Are you sure that was the pin?");
@@ -77,7 +77,7 @@ document.getElementById('create-new-tournament').addEventListener('click', async
                 localStorage.setItem('tournamentPin', tournamentPin);
     
                 // Navigate to create.html
-                window.location.href = '/create';
+                window.location.href = '/create.html';
             } else {
                 alert('Error: Failed to receive a tournament pin.');
             }
