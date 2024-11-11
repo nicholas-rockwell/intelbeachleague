@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const tournamentPin = localStorage.getItem('tournamentPin');
     if (!tournamentPin) {
-        alert('No tournament pin found. Please enter the pin on the homepage.');
+        alert('No tournament pin found. Please try again on the homepage.');
         window.location.href = '/index.html';
         return;
     }
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                             player.history.push({
                                 opponent: match.team2,
                                 score: `${team1Score} - ${team2Score}`,
-                                result: team1Score === team2Score ? "-" : (team1Score > team2Score ? "Win" : "Loss"),
+                                result: team1Score === team2Score ? "Not Yet Played" : (team1Score > team2Score ? "Win" : "Loss"),
                                 partner: partner,
                                 gameNumber: game.gameNumber
                             });
@@ -104,7 +104,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             weekInfo: parsedBody.weekInfo || {}
         };
     }
-    
+
+    function updateTournamentName(name) {
+        const tournamentNameElement = document.querySelector('.KOB');
+        if (tournamentNameElement) {
+            tournamentNameElement.textContent = name;
+        }
+    }
 
     function sortPlayers(players) {
         players.sort((a, b) => (b.points - a.points) || (b.wins - a.wins));
@@ -124,13 +130,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (rank % 10 === 2 && rank % 100 !== 12) return 'nd';
         if (rank % 10 === 3 && rank % 100 !== 13) return 'rd';
         return 'th';
-    }
-
-    function updateTournamentName(name) {
-        const tournamentNameElement = document.querySelector('.KOB');
-        if (tournamentNameElement) {
-            tournamentNameElement.textContent = name;
-        }
     }
 
     function renderPlayerList(players) {
@@ -242,69 +241,53 @@ document.addEventListener('DOMContentLoaded', async function () {
         allMatchesSection.appendChild(matchCard);
     });
     attachScoreSubmitEvent();
-}
-
-    // POSSIBLE HOME BUTTON TO ALLOW USERS TO CHECK OTHER TOURNAMENT?
-    // const homeButton = document.querySelector('.home');
-    // homeButton.addEventListener('click', () => {
-    //     // Remove tournamentPin from local storage
-    //     localStorage.removeItem('tournamentPin');
-            
-    //     // Redirect to index.html
-    //     window.location.href = '/index.html';
-    // });
-
-
-    // Add Game Button
-const addButton = document.querySelector('.add-game');
-addButton.addEventListener('click', async () => {
-    const tournamentData = await fetchTournamentDataByPin();
-
-    if (!tournamentData) {
-        alert("Could not load tournament data. Please try again.");
-        return;
     }
 
-    // Show a modal or form to select players for both teams
-    const modal = document.createElement('div');
-    modal.classList.add('modal');
-    modal.innerHTML = `
-        <div class="modal-content">
-            <h3>Select Players for New Game</h3>
-            <label>Team 1, Player 1:</label>
-            <select id="team1-player1-select"></select>
-            <label>Team 1, Player 2:</label>
-            <select id="team1-player2-select"></select>
-            <label>Team 2, Player 1:</label>
-            <select id="team2-player1-select"></select>
-            <label>Team 2, Player 2:</label>
-            <select id="team2-player2-select"></select>
-            <button class="submit-new-game">Add Game</button>
-            <button class="close-modal">Cancel</button>
-        </div>
-    `;
-    document.body.appendChild(modal);
+    // Add Game Button
+    const addButton = document.querySelector('.add-game');
+    addButton.addEventListener('click', async () => {
+        const tournamentData = await fetchTournamentDataByPin();
 
-    // Populate player selection options
-    const playerSelectors = [
-        document.getElementById('team1-player1-select'),
-        document.getElementById('team1-player2-select'),
-        document.getElementById('team2-player1-select'),
-        document.getElementById('team2-player2-select')
-    ];
+        if (!tournamentData) {
+            alert("IT WAS A MISS-INPUT");
+            return;
+        }
 
-    tournamentData.players.forEach(player => {
-        playerSelectors.forEach(select => {
-            const option = document.createElement('option');
-            option.value = player.name;
-            option.textContent = player.name;
-            select.appendChild(option);
+        // Show a modal or form to select players for both teams
+        const modal = document.createElement('div');
+        modal.classList.add('modal');
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h3>Select Players for New Game</h3>
+                <label>Team 1, Player 1:</label>
+                <select id="team1-player1-select"></select>
+                <label>Team 1, Player 2:</label>
+                <select id="team1-player2-select"></select>
+                <label>Team 2, Player 1:</label>
+                <select id="team2-player1-select"></select>
+                <label>Team 2, Player 2:</label>
+                <select id="team2-player2-select"></select>
+                <button class="submit-new-game">Add Game</button>
+                <button class="close-modal">Cancel</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        // Populate player selection options
+        const playerSelectors = [
+            document.getElementById('team1-player1-select'),
+            document.getElementById('team1-player2-select'),
+            document.getElementById('team2-player1-select'),
+            document.getElementById('team2-player2-select')
+        ];
+
+        tournamentData.players.forEach(player => {
+            playerSelectors.forEach(select => {
+                const option = document.createElement('option');
+                option.value = player.name;
+                option.textContent = player.name;
+                select.appendChild(option);
         });
-    });
-
-    // Close modal functionality
-    document.querySelector('.close-modal').addEventListener('click', () => {
-        document.body.removeChild(modal);
     });
 
     // Handle submit new game
@@ -314,7 +297,7 @@ addButton.addEventListener('click', async () => {
         // Check for duplicate players
         const uniquePlayers = new Set(selectedPlayers);
         if (uniquePlayers.size !== selectedPlayers.length) {
-            alert('No duplicate players please');
+            alert('You can\'t play on two teams at once, ya dip!');
             return;
         }
 
@@ -330,6 +313,11 @@ addButton.addEventListener('click', async () => {
         if (updatedTournamentData) {
             renderAllMatches(updatedTournamentData.weekInfo.matches);
         }
+    });
+
+    // Close modal functionality
+    document.querySelector('.close-modal').addEventListener('click', () => {
+        document.body.removeChild(modal);
     });
 });
 
@@ -376,7 +364,12 @@ async function addNewGame(team1, team2) {
                 const team2Score = matchCard.querySelector('.team2-score').value;
 
                 if (!team1Score || !team2Score) {
-                    alert('Please enter scores for both teams.');
+                    alert('Both teams should have a score');
+                    return;
+                }
+
+                if ((team1Score < 21 && team2Score < 21) || Math.abs(team1Score - team2Score) < 2) {
+                    alert('Games are to 21, win by 2! It\'s always been this way.');
                     return;
                 }
 
@@ -429,3 +422,10 @@ async function addNewGame(team1, team2) {
         renderAllMatches(tournamentData.weekInfo.matches);
     }
 });
+
+// POSSIBLE HOME BUTTON TO ALLOW USERS TO CHECK OTHER TOURNAMENT?
+// const homeButton = document.querySelector('.home');
+// homeButton.addEventListener('click', () => {
+//     localStorage.removeItem('tournamentPin');
+//     window.location.href = '/index.html';
+// });

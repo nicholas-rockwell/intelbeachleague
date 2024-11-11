@@ -1,27 +1,3 @@
-// Define the base URL for the API endpoints
-const API_BASE_URL = 'https://5n1op4gak6.execute-api.us-west-2.amazonaws.com/prod';
-
-// Function to perform fetch with a timeout
-async function fetchWithTimeout(url, options, timeout = 15000) { // 15 seconds default timeout
-    return new Promise((resolve, reject) => {
-        // Set a timeout to reject the promise if it takes too long
-        const timer = setTimeout(() => {
-            reject(new Error('Request timed out'));
-        }, timeout);
-
-        // Perform the fetch
-        fetch(url, options)
-            .then(response => {
-                clearTimeout(timer); // Clear the timeout if fetch succeeds
-                resolve(response);
-            })
-            .catch(err => {
-                clearTimeout(timer); // Clear the timeout if fetch fails
-                reject(err);
-            });
-    });
-}
-
 document.getElementById('enter-league').addEventListener('click', async function(event) {
     event.preventDefault();  // Prevent form submission if inside a form
     
@@ -29,7 +5,7 @@ document.getElementById('enter-league').addEventListener('click', async function
 
     const tournamentPin = document.getElementById('tournament-pin-input').value;
     if (!tournamentPin) {
-        alert("Please enter a tournament pin.");
+        alert("Enter a pin first");
         return;
     }
 
@@ -60,31 +36,32 @@ document.getElementById('enter-league').addEventListener('click', async function
             window.location.href = '/league.html';
         } else {
             console.error("Failed to verify pin:", response.status);
-            alert("Pin wasn't found or verification failed.");
+            alert("Are you sure that was the pin?");
         }
     } catch (error) {
         console.error('Error finding pin', error);
-        alert('Failed to join tournament. Please try again.');
+        alert('Error, try again but consider asking Nick');
     }
 });
 
 // Creating tournament pin assignment and redirect
 document.getElementById('create-new-tournament').addEventListener('click', async function() {
+    
     // Prepare the request body for the Lambda function
     const requestBody = {
-        httpMethod: 'POST',          // Explicitly include the HTTP method
-        path: '/assignPin',           // Explicitly include the path
-        action: 'assignPin'           // Action identifier, similar to previous working code
+        httpMethod: 'POST',         
+        path: '/assignPin',           
+        action: 'assignPin'           
     };
 
     try {
-        // Send the POST request to the Lambda function with a 15-second timeout
-        const response = await fetch(`${API_BASE_URL}/assignPin`, {
+        // POST request to lambda
+        const response = await fetch(`https://5n1op4gak6.execute-api.us-west-2.amazonaws.com/prod/assignPin`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(requestBody) // Ensure that body is in the correct format
+            body: JSON.stringify(requestBody)
         });
     
         const result = await response.json();
@@ -95,6 +72,7 @@ document.getElementById('create-new-tournament').addEventListener('click', async
         if (response.ok) {
             const tournamentPin = tournamentData.tournamentPin;
             if (tournamentPin) {
+
                 // Store the pin in localStorage for use on the next page
                 localStorage.setItem('tournamentPin', tournamentPin);
     
@@ -110,5 +88,4 @@ document.getElementById('create-new-tournament').addEventListener('click', async
         console.error('Error assigning pin:', error);
         alert('Failed to create tournament pin. Please try again.');
     }
-    
 });
