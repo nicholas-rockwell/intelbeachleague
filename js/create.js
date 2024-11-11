@@ -41,13 +41,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (newPlayerName === "Nick") {
                 showToast('FATHER?!');
-            }
+            } 
             // Remove for prod
 
             players.push(newPlayerName);
             updatePlayerList();
             newPlayerInput.value = '';
-            showToast(`${newPlayerName} added successfully!`);
+            // showToast(`${newPlayerName} added successfully!`);
         } else {
             showToast('Player already added, choose a unique name.');
         }
