@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const tournamentPin = localStorage.getItem('tournamentPin');
     if (!tournamentPin) {
         alert('No tournament pin found. Please try again on the homepage.');
-        window.location.href = '/index.html';
+        window.location.href = '/index';
         return;
     }
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         } catch (error) {
             console.error('Error fetching tournament data:', error);
             alert('Failed to load tournament data. Please check the pin and try again.');
-            window.location.href = '/index.html';
+            window.location.href = '/IntelBeachLeague';
         }
     }
 
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         players.forEach((player, index) => {
             const rank = index + 1;
             const suffix = getOrdinalSuffix(rank);
-            player.rank = `${rank}<sup>${suffix}</sup>`;
+            player.rank = `<span class="rank-number">${rank}</span><sup>${suffix}</sup>`;
         });
     
         return players;
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <div class="player-header">
                     <div class="player-rank">${player.rank}</div>
                     <div class="player-name">${player.name}</div>
-                    <div><span class="points">Score: </span><span class="player-points">${player.points}</span></div>
+                    <div><span class="points">Points: </span><span class="player-points">${player.points}</span></div>
                 </div>
                 <div class="player-record" style="display: none;">
                     <br>
@@ -242,6 +242,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
     attachScoreSubmitEvent();
     }
+
+    // POSSIBLE HOME BUTTON TO ALLOW USERS TO CHECK OTHER TOURNAMENT?
+    const homeButton = document.querySelector('.home');
+    homeButton.addEventListener('click', () => {
+        localStorage.removeItem('tournamentPin');
+        window.location.href = '/IntelBeachLeague';
+    });
 
     // Add Game Button
     const addButton = document.querySelector('.add-game');
@@ -404,7 +411,7 @@ async function addNewGame(team1, team2) {
     
             if (response.ok) {
                 console.log("Score submitted.")
-                window.location.href = '/league.html';
+                window.location.href = '/league';
             } else {
                 console.error('Error submitting scores:', await response.json());
                 alert('Error submitting scores.');
@@ -422,10 +429,3 @@ async function addNewGame(team1, team2) {
         renderAllMatches(tournamentData.weekInfo.matches);
     }
 });
-
-// POSSIBLE HOME BUTTON TO ALLOW USERS TO CHECK OTHER TOURNAMENT?
-// const homeButton = document.querySelector('.home');
-// homeButton.addEventListener('click', () => {
-//     localStorage.removeItem('tournamentPin');
-//     window.location.href = '/index.html';
-// });

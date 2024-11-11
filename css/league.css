@@ -16,7 +16,7 @@ body {
 }
 
 /* ========================
-   HEADER & GENERAL TYPOGRAPHY
+   HEADER & GENERAL
 ======================== */
 header {
     text-align: center;
@@ -30,16 +30,6 @@ h1 {
     display: inline-block;
 }
 
-.home {
-    text-align: center;
-    font-style: italic;
-    font-size: clamp(0.5em, 2vw, 3em);
-    position: absolute;
-    cursor: pointer;
-    padding: 10px;
-    text-decoration: underline;
-}
-
 #tournament-pin-display {
     font-size: clamp(1em, 2vw, 4em);
 }
@@ -47,15 +37,17 @@ h1 {
 /* ========================
    RANKING HEADER
 ======================== */
+
 .ranking-header {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-bottom: 10px;
+    padding-top: 10px;
     position: relative;
     font-size: clamp(1em, 2vw, 3em);
     max-width: 100%;
     margin: auto;
+    bottom: -10px;
 }
 
 .smaller-ranks-h2 {
@@ -66,6 +58,7 @@ h1 {
     text-align: left;
     position: absolute;
     left: 0;
+    bottom: -10px;
 }
 
 .center-h2 {
@@ -81,6 +74,8 @@ h1 {
     font-style: italic;
     color: #FFD700;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
     animation: dualPulseGlow 10s infinite alternate;
 }
@@ -96,6 +91,7 @@ h1 {
 /* ========================
    PLAYER LIST
 ======================== */
+
 #player-list {
     list-style: none;
     background-color: rgba(0, 0, 0, 0.8);
@@ -154,10 +150,15 @@ ul {
 }
 
 .player-points {
-    font-size: 1.2em;
+    font-size: 1.3em;
     color: #FFD700;
     text-shadow: 0 0 5px rgba(255, 215, 0, 0.7);
 }
+
+/* IF CHANGING RANK NUMBER STYLE IS DESIRED */
+/* .rank-number {
+    animation: dualPulseGlow 6s infinite alternate;
+} */
 
 @keyframes dualPulseGlow {
     0% {
@@ -177,6 +178,7 @@ ul {
 /* ========================
    MATCH SECTION & SCORE INPUT
 ======================== */
+
 #current-matches {
     list-style: none;
     padding: 0;
@@ -185,7 +187,6 @@ ul {
 .match-card {
     background-color: #333333;
     padding: 15px;
-    margin-bottom: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     position: relative;
@@ -205,7 +206,6 @@ ul {
     width: 100%;
     height: 100%;
     padding: 0 20px;
-    border: 2px solid #020202;
     border-radius: 8px;
 }
 
@@ -240,18 +240,17 @@ ul {
 /* Position the left and right score inputs */
 .score-input.team1-score {
     margin-right: auto;
-    width: 10vw; /* Responsive width */
-    min-width: 40px; /* Sets a minimum width to ensure readability */
-    max-width: 100px; /* Optional: Limits size on larger screens */
+    width: 10vw; 
+    min-width: 40px; 
+    max-width: 100px; 
 }
 
 .score-input.team2-score {
     margin-left: auto;
-    width: 10vw; /* Responsive width */
-    min-width: 40px; /* Sets a minimum width to ensure readability */
-    max-width: 100px; /* Optional: Limits size on larger screens */
+    width: 10vw; 
+    min-width: 40px; 
+    max-width: 100px;
 }
-
 
 .score-submit-container {
     margin-top: 10px;
@@ -261,7 +260,6 @@ ul {
 }
 
 .score-submit-container button {
-    margin-bottom: 10px;
     padding: 8px 16px;
     background: #FFD700;
     border: none;
@@ -275,8 +273,40 @@ ul {
 }
 
 /* ========================
+   HOME BUTTON
+======================== */
+
+#home {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.home {  
+    padding: 8px 16px;
+    background: #FFD700;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    color: black;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    font-size: clamp(1em, 2vw, 3em);
+}
+
+.home:hover {
+    background-color: #FFC300;
+}
+
+/* ========================
    ADD GAME BUTTON
 ======================== */
+
 #add-game {
     display: flex;
     width: 100%;
@@ -313,7 +343,7 @@ ul {
     color: #FFC300;
 }
 
-/* Remove spin arrows from number inputs */
+/* Remove arrows from number inputs */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -375,11 +405,10 @@ input[type="number"]::-webkit-inner-spin-button {
     cursor: pointer;
 }
 
-
-
 /* ========================
    RESPONSIVE STYLES
 ======================== */
+
 @media only screen and (max-width: 600px) {
     body {
         padding: 10px;

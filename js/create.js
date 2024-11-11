@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (response.ok) {
                 console.log("Tournament created.");
-                window.location.href = '/league.html';
+                window.location.href = '/league';
             } else {
                 console.error('Error creating tournament:', data);
             }
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Return to Home Screen Functionality
     returnHomeButton.addEventListener('click', function() {
         localStorage.removeItem('tournamentPin');
-        window.location.href = '/index.html';
+        window.location.href = '/IntelBeachLeague';
     });
 
     // Update Player List in Remove Player Dropdown and Display
