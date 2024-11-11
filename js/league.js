@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const homeButton = document.querySelector('.home');
     homeButton.addEventListener('click', () => {
         localStorage.removeItem('tournamentPin');
-        window.location.href = '/IntelBeachLeague';
+        window.location.href = '/index.html';
     });
 
     // Add Game Button
