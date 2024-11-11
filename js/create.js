@@ -30,16 +30,16 @@ document.addEventListener('DOMContentLoaded', function() {
         if (newPlayerName && !players.includes(newPlayerName)) {
             
             // Remove for prod
-            if (newPlayerName === "Aly") {
+            if (newPlayerName === "ALY") {
                 showToast('Hey Gorgeous ;)');
             }
-            if (newPlayerName === "Boba") {
+            if (newPlayerName === "BOBA") {
                 showToast('Shut up, we\'re trying to sleep');
             }
-            if (newPlayerName === "Mochi") {
+            if (newPlayerName === "MOCHI") {
                 showToast('Hey honey :)');
             }
-            if (newPlayerName === "Nick") {
+            if (newPlayerName === "NICK") {
                 showToast('FATHER?!');
             } 
             // Remove for prod
