@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add Player Functionality
     addPlayerButton.addEventListener('click', function() {
-        const newPlayerName = newPlayerInput.value.trim();
+        const newPlayerName = newPlayerInput.value.trim().toUpperCase();
         if (newPlayerName && !players.includes(newPlayerName)) {
             
             // Remove for prod
